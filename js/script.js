@@ -42,4 +42,28 @@ var octopus = {
     catListView.init();
     catView.init();
   },
-}
+
+  //increases the counter for the current cat
+  increaseCounter: function(){
+    model.currentCat.count++;
+    catView.render();
+  }
+
+
+};
+
+//-----------View
+var catView = {
+  init: function(){
+    //store elements from the DOM for recall later
+    //for selected cat
+    this.catNameElement = document.getElementById('name');
+    this.catImageElement = document.getElementById('cat-image');
+    this.catCountElement = document.getElementById('count');
+
+    //on click increase the current cat count
+    this.catImageElement.addEventListener('click', function(){
+      octopus.increaseCounter();
+    })
+  }
+};
