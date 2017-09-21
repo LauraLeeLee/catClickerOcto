@@ -89,7 +89,7 @@ var catView = {
     //update the DOM with information from current selected catView
     var currentCat = octopus.getCurrentCat();
     this.catNameElement.textContent = currentCat.name;
-    this.catImageElement.textContent = currentCat.img;
+    this.catImageElement.src = currentCat.img;
     this.catCountElement.textContent = currentCat.count;
   }
 };
