@@ -43,18 +43,33 @@ var octopus = {
     catView.init();
   },
 
+//retrieves the current cat
+  getCurrentCat: function() {
+    return model.currentCat;
+  },
+
+//retrieves the cat array
+  getCats: function() {
+    return model.cats;
+  },
+
+  //sets current selected cat to the object passed in
+    //what does this do? why is it needed?
+    //How would we know it is needed?
+  setCurrentCat: function(cat) {
+    model.currentCat = cat;
+  },
+
   //increases the counter for the current cat
   increaseCounter: function(){
     model.currentCat.count++;
     catView.render();
   }
-
-
 };
 
 //-----------View
 var catView = {
-  init: function(){
+  init: function() {
     //store elements from the DOM for recall later
     //for selected cat
     this.catNameElement = document.getElementById('name');
@@ -64,6 +79,59 @@ var catView = {
     //on click increase the current cat count
     this.catImageElement.addEventListener('click', function(){
       octopus.increaseCounter();
-    })
+    });
+
+    //render view- update DOM elements
+    this.render();
+  },
+
+  render: function() {
+    //update the DOM with information from current selected catView
+    var currentCat = octopus.getCurrentCat();
+    this.catNameElement.textContent = currentCat.name;
+    this.catImageElement.textContent = currentCat.img;
+    this.catCountElement.textContent = currentCat.count;
   }
 };
+
+var catListView = {
+
+  init: function() {
+    //stores DOM element to access later
+    this.catListElement = document.getElementById('cat-list');
+
+    //render the view updates the DOM element for the list
+    this.render();
+  },
+
+  render: function() {
+    var cat, liElement, i;
+
+    //gets the cat names to render in list
+    var cats = octopus.getCats();
+
+    //loop over the cats
+    for (i = 0; i < cats.length; i++) {
+      cat = cats[i];
+
+      //make a new list item and give it its cat name
+      liElement = document.createElement('li');
+      liElement.textContent = cat.name;
+
+      // on a click set the selected current cat and render its catView
+      //-use closure-in-a-loop
+      liElement.addEventListener('click', (function(catCopy){
+        return function() {
+          octopus.setCurrentCat(catCopy);
+          catView.render();
+        }
+      })(cat));
+
+      //append element to DOM
+      this.catListElement.appendChild(liElement);
+    }
+  }
+};
+
+//initialize it all
+octopus.init();
